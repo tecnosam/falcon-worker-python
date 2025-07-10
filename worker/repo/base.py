@@ -56,32 +56,6 @@ class AbstractVectorStore(ABC):
         pass
 
 
-class AbstractCameraRepo(ABC):
-    """
-    Abstract base class for camera repositories.
-    """
-
-    @abstractmethod
-    async def get_connection_info(self, camera_id: UUID) -> Any:
-        """
-        Get the connection information for a camera.
-        
-        :param camera_id: The ID of the camera.
-        :return: Workable connection information
-        """
-        pass
-
-    @abstractmethod
-    async def get_camera_owner_id(self, camera_id: UUID) -> UUID:
-        """
-        Get the owner ID of a camera.
-        
-        :param camera_id: The ID of the camera.
-        :return: The owner ID of the camera.
-        """
-        pass
-
-
 class AbstractPubSubProvider(ABC):
 
     @abstractmethod

@@ -2,7 +2,7 @@
 
 
 from typing import List
-from worker.repo.base import AbstractCameraRepo, AbstractIncidenceLogger, AbstractPubSubProvider, AbstractVectorStore
+from worker.repo.base import AbstractIncidenceLogger, AbstractPubSubProvider, AbstractVectorStore
 from worker.repo.jetstream import JetStreamPubSubProvider
 
 
@@ -28,13 +28,6 @@ class Factory:
         Factory method to create a vector store instance.
 
         :return: An instance of a vector store.
-        """
-
-    def create_camera_repo(self) -> AbstractCameraRepo:
-        """
-        Factory method to create a camera repository instance.
-
-        :return: An instance of a camera repository.
         """
 
     def create_incidence_logger(self) -> AbstractIncidenceLogger:

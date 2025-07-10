@@ -1,12 +1,11 @@
 
-from worker.repo.base import AbstractIncidenceLogger, AbstractVectorStore, AbstractCameraRepo
+from worker.repo.base import AbstractIncidenceLogger, AbstractVectorStore
 
 
 def get_incident_handler(
     channel: str,
     logger: AbstractIncidenceLogger,
     vector_store: AbstractVectorStore,
-    camera_repo: AbstractCameraRepo
 ):
 
     async def handle_incident(incident):
