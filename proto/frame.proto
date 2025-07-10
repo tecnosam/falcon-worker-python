@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package surveillance;
+
+// import "google/protobuf/bytes.proto";
+
+// Base frame — common to both image and video
+message BaseFrame {
+  string frame_id = 1;         // UUID as string
+  string camera_id = 2;        // UUID as string
+  double timestamp = 3;        // Unix timestamp in float (e.g., seconds.ms)
+  repeated int32 dimensions = 4; // [width, height]
+  string encoding = 5;         // "jpeg", "png", etc.
+}
+
+// Image frame — extends BaseFrame
+message ImageFrame {
+  BaseFrame base = 1;
+  bytes image_data = 2;
+  string encoding = 3; // Defaults to "jpeg"
+}
+
+// Video frame — separate structure
+message VideoFrame {
+  string camera_id = 1;
+  double timestamp = 2;
+  bytes video_data = 3;
+  string encoding = 4; // Defaults to "mp4"
+  float frame_rate = 5;
+}

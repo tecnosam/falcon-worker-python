@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package surveillance;
+
+import "google/protobuf/timestamp.proto";
+
+message IncidentAnnotation {
+  string label = 1;
+  float confidence = 2; // 0.0 to 1.0
+  repeated float bounding_box = 3; // [x_min, y_min, x_max, y_max]
+  string category = 4; // optional
+}
+
+message Incident {
+  string camera_id = 1; // UUID serialized as string
+  double timestamp = 2; // Unix time in float format (seconds.ms)
+  repeated IncidentAnnotation annotations = 3;
+  repeated float embedding = 4;  // optional
+  repeated int32 dimensions = 5; // optional
+}
