@@ -1,14 +1,23 @@
 
+## Code
+
+- Implement QDrant vector store repo
+- Switch to using Protobuf for pubsub
+- Fix mypy errors
+
 
 ## DevOps
 
-1. Configure Jetstream instance locally
-2. Configure Cassandra / Scylla instance locally
-3. Configure QDrant for vector store
-4. Figure out what to use for the camera store (likely PostgreSQL)
+- Docker file
+- Configure Jetstream container locally
+- Configure Scylla container locally
+- Configure QDrant container locally
+- Docker compose file
 
 
 ## Tests
 
-- Implement test repos for all abstract repos
-- Test that workflow works fine
+- Test workflow with Mock repositories
+- Test `JetStreamPubSubProvider`
+- Test `CassandraIncidenceLogger`
+- Test QDrant vector store
