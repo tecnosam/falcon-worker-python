@@ -2,7 +2,6 @@ from acsylla import create_cluster, Session
 from typing import Optional
 from worker.repo.base import AbstractIncidenceLogger
 from worker.schemas import Incident
-from uuid import UUID
 
 
 class CassandraIncidenceLogger(AbstractIncidenceLogger):

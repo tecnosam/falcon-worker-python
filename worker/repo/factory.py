@@ -1,7 +1,6 @@
 
 
 
-from typing import List
 from worker.repo.base import AbstractIncidenceLogger, AbstractPubSubProvider, AbstractVectorStore
 from worker.repo.jetstream import JetStreamPubSubProvider
 

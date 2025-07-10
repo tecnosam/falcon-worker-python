@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from uuid import UUID
 from typing import List, Any, Awaitable
 
 from worker.schemas import Incident, IncidentAnnotation

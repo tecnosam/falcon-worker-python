@@ -21,8 +21,8 @@ class Incident(BaseModel):
     camera_id: UUID
     timestamp: float
     annotations: List[IncidentAnnotation]
-    embedding: List[float] = None
-    dimensions: List[int] = None
+    embedding: List[float]
+    dimensions: List[int]
 
 
 class BaseFrame(BaseModel):

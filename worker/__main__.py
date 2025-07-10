@@ -22,7 +22,7 @@ async def main(
     """
 
     factory = Factory()
-    image_queue = queue.Queue()
+    image_queue: queue.Queue = queue.Queue()
     incident_logger = factory.create_incidence_logger()
     vector_store = factory.create_vector_store()
 
@@ -35,9 +35,6 @@ async def main(
         stream_name="FRAMES",
         subjects=["frames.*"]
     )
-
-    await incidents_pubsub.connect()
-    await frames_pubsub.connect()
 
     # Start incident subscription
     incident_channel = f"incident.{camera_id}"
