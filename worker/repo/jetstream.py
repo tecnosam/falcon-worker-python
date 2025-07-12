@@ -1,7 +1,7 @@
 from nats.aio.client import Client as NATS
 from nats.js.client import JetStreamContext
 from nats.js.api import StreamConfig
-from typing import Any, Awaitable, List
+from typing import Any, Awaitable, Callable, List
 import json
 
 from .base import AbstractPubSubProvider  # Assuming your interface is in base.py
@@ -17,13 +17,12 @@ class JetStreamPubSubProvider(AbstractPubSubProvider):
         self.nats_url = nats_url
         self.stream_name = stream_name
         self.nc: NATS = NATS()
-        self.js: JetStreamContext = None
+        self.js: JetStreamContext = self.nc.jetstream()
         self.subjects = subjects
 
     async def connect(self):
         if not self.nc.is_connected:
             await self.nc.connect(servers=[self.nats_url])
-            self.js = self.nc.jetstream()
 
             # Create the stream (if not already present)
             try:
@@ -50,7 +49,7 @@ class JetStreamPubSubProvider(AbstractPubSubProvider):
         payload = json.dumps(message).encode("utf-8")
         await self.js.publish(subject=channel, payload=payload)
 
-    async def subscribe(self, channel: str, callback: Awaitable):
+    async def subscribe(self, channel: str, callback: Callable[[str], Awaitable[None]]):
         if not self.js:
             await self.connect()
 
@@ -68,5 +67,4 @@ class JetStreamPubSubProvider(AbstractPubSubProvider):
             cb=message_handler,
             stream=self.stream_name,
             manual_ack=True,
-            ack_wait=30,
         )

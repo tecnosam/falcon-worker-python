@@ -1,8 +1,18 @@
 
 
 
-from worker.repo.base import AbstractIncidenceLogger, AbstractPubSubProvider, AbstractVectorStore
-from worker.repo.jetstream import JetStreamPubSubProvider
+from worker.repo.base import (
+    AbstractIncidenceLogger,
+    AbstractPubSubProvider,
+    AbstractVectorStore,
+)
+# from worker.repo.jetstream import JetStreamPubSubProvider
+
+from worker.repo.mocks import (
+    MockIncidenceLogger,
+    MockVectorStore,
+    MockPubSubProvider
+)
 
 
 class Factory:
@@ -14,13 +24,15 @@ class Factory:
         :return: An instance of a PubSub provider.
         """
 
-        stream_name = kwargs.get("stream_name", "DEFAULT")
-        subjects = kwargs.get("subjects", ["default.*"])
+        return MockPubSubProvider(**kwargs)
 
-        return JetStreamPubSubProvider(
-            stream_name=stream_name,
-            subjects=subjects
-        )
+        # stream_name = kwargs.get("stream_name", "DEFAULT")
+        # subjects = kwargs.get("subjects", ["default.*"])
+
+        # return JetStreamPubSubProvider(
+        #     stream_name=stream_name,
+        #     subjects=subjects
+        # )
 
     def create_vector_store(self) -> AbstractVectorStore:
         """
@@ -29,9 +41,15 @@ class Factory:
         :return: An instance of a vector store.
         """
 
+        store = MockVectorStore()
+        store.preload([])  # Preload with an empty list or some predefined annotations
+        return store
+
     def create_incidence_logger(self) -> AbstractIncidenceLogger:
         """
         Factory method to create an incidence logger instance.
 
         :return: An instance of an incidence logger.
         """
+
+        return MockIncidenceLogger()

@@ -1,5 +1,5 @@
 from time import time
-from typing import List
+from typing import List, Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
@@ -12,7 +12,7 @@ class IncidentAnnotation(BaseModel):
     label: str
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)  # Confidence score between 0 and 1
     bounding_box: List[float] = Field(default_factory=list)  # [x_min, y_min, x_max, y_max]
-    category: str = None  # Optional category for the annotation
+    category: Optional[str] = None  # Optional category for the annotation
 
 
 class Incident(BaseModel):
@@ -32,7 +32,7 @@ class BaseFrame(BaseModel):
     """
     frame_id: UUID = Field(default_factory=uuid4)  # Unique identifier for the frame
     camera_id: UUID
-    timestamp: float = Field(default_factory=time.time)
+    timestamp: float = Field(default_factory=time)
     dimensions: List[int] = Field(default_factory=list)  # [width, height]
     encoding: str = "jpeg"  # Default encoding format
 

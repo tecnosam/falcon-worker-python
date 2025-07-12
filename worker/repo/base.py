@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Any, Awaitable
+from typing import Callable, List, Any, Awaitable
 
 from worker.schemas import Incident, IncidentAnnotation
 
@@ -61,7 +61,7 @@ class AbstractPubSubProvider(ABC):
     async def subscribe(
         self,
         channel: str,
-        callback: Awaitable
+        callback: Callable[[str], Awaitable[None]]
     ):
         """
         Subscribes to a channel / topic on a PubSub

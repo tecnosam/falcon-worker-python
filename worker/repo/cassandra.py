@@ -1,4 +1,4 @@
-from acsylla import create_cluster, Session
+from acsylla import create_cluster, Session # type: ignore
 from typing import Optional
 from worker.repo.base import AbstractIncidenceLogger
 from worker.schemas import Incident
@@ -32,7 +32,7 @@ class CassandraIncidenceLogger(AbstractIncidenceLogger):
         """)
 
     async def log(self, incident: Incident) -> None:
-        if self.session is None:
+        if self.session is None or self._prepared_stmt is None:
             raise RuntimeError("Cassandra session not initialized. Call connect() first.")
 
         for annotation in incident.annotations:
