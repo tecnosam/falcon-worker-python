@@ -1,9 +1,9 @@
 
 ## Code
 
+- Fix issues with gracefully shutting down the worker
 - Implement QDrant vector store repo
 - Switch to using Protobuf for pubsub
-- Fix mypy errors
 
 
 ## DevOps
@@ -17,7 +17,7 @@
 
 ## Tests
 
-- Test workflow with Mock repositories
+- Test workflow with Mock repositories (Done)
 - Test `JetStreamPubSubProvider`
 - Test `CassandraIncidenceLogger`
 - Test QDrant vector store
