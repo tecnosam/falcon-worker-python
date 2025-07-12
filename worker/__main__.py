@@ -64,16 +64,21 @@ async def main(
             pubsub=frames_pubsub,
             channel=config.image_write_channel
         ),
-        subscriber_task
+        subscriber_task,
     )
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        camera_id = UUID(sys.argv[1])
-        rstp_url = sys.argv[2]
-    else:
-        print("Usage: python -m worker <camera_id> <rtsp_url>")
-        sys.exit(1)
 
-    asyncio.get_event_loop().run_until_complete(main(camera_id=camera_id, rstp_url=rstp_url, config=WorkerConfig()))
+    try:
+        if len(sys.argv) == 3:
+            camera_id = UUID(sys.argv[1])
+            rstp_url = sys.argv[2]
+        else:
+            print("Usage: python -m worker <camera_id> <rtsp_url>")
+            sys.exit(1)
+
+        asyncio.run(main(camera_id=camera_id, rstp_url=rstp_url, config=WorkerConfig()))
+    except KeyboardInterrupt:
+        print("Worker stopped by user.")
+        sys.exit(0)

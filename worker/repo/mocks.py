@@ -10,10 +10,11 @@ from worker.repo.base import AbstractIncidenceLogger, AbstractVectorStore, Abstr
 
 class MockIncidenceLogger(AbstractIncidenceLogger):
     def __init__(self):
-        self.logged = []
+        pass
 
     async def log(self, incidence: Incident) -> None:
-        self.logged.append(incidence)
+        # self.logged.append(incidence)
+        await asyncio.sleep(0.01)
 
     async def flush(self) -> None:
         # No-op or simulate sending to storage
@@ -31,8 +32,16 @@ class MockVectorStore(AbstractVectorStore):
         dimensions: List[int],
         bounding_box: List[int],
         k: int = 5,
+        min_distance: float = 0.5,
         **filters
     ) -> List[IncidentAnnotation]:
+        
+        await asyncio.sleep(0.04)
+        
+        if random.randint(0, 4) == 0:
+            return []
+        
+        random.shuffle(self.storage)  # Shuffle to simulate randomness
         # Return the first k annotations regardless of embedding similarity
         return self.storage[:k]
 
@@ -58,6 +67,9 @@ class MockPubSubProvider(AbstractPubSubProvider):
         representing a randomly generated Incident to the callback.
         """
         while self.active:
+
+            if random.randint(0, 10) == 0:
+                continue
             incident = self._generate_random_incident()
             payload = incident.model_dump_json()
             await callback(payload)
@@ -78,12 +90,18 @@ class MockPubSubProvider(AbstractPubSubProvider):
             timestamp=time.time(),
             annotations=[
                 IncidentAnnotation(
-                    label=random.choice(["person", "vehicle", "animal"]),
+                    label=random.choice([
+                        "jackson smith",
+                        "Tom Holland",
+                        "The boogieman",
+                        "Security staff 1826A"
+                    ]),
                     confidence=round(random.uniform(0.6, 1.0), 2),
-                    bounding_box=[random.uniform(0, 1) for _ in range(4)],
-                    category=random.choice(["threat", "non-threat", None]),
+                    bounding_box=[random.randint(0, 10) for _ in range(4)],
+                    category=random.choice(["person"]),
+                    embedding=[random.random() for _ in range(128)],
                 )
+                for _ in range(random.randint(1, 5))
             ],
-            embedding=[random.random() for _ in range(128)],
             dimensions=[1920, 1080],
         )

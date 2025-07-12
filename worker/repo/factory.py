@@ -1,6 +1,7 @@
 
 
 
+import random
 from worker.repo.base import (
     AbstractIncidenceLogger,
     AbstractPubSubProvider,
@@ -13,6 +14,7 @@ from worker.repo.mocks import (
     MockVectorStore,
     MockPubSubProvider
 )
+from worker.schemas import IncidentAnnotation
 
 
 class Factory:
@@ -42,7 +44,21 @@ class Factory:
         """
 
         store = MockVectorStore()
-        store.preload([])  # Preload with an empty list or some predefined annotations
+        store.preload([
+            IncidentAnnotation(
+                label=random.choice([
+                    "jackson smith",
+                    "Tom Holland",
+                    "The boogieman",
+                    "Security staff 1826A"
+                ]),
+                confidence=round(random.uniform(0.6, 1.0), 2),
+                bounding_box=[random.randint(0, 10) for _ in range(4)],
+                category=random.choice(["person"]),
+                embedding=[random.random() for _ in range(128)],
+            )
+            for _ in range(10)
+        ])  # Preload with an empty list or some predefined annotations
         return store
 
     def create_incidence_logger(self) -> AbstractIncidenceLogger:

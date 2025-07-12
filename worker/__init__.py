@@ -5,6 +5,8 @@ import queue
 
 from uuid import UUID
 
+import numpy as np
+
 from worker.schemas import ImageFrame
 
 from worker.repo.base import AbstractPubSubProvider
@@ -15,27 +17,32 @@ def camera_worker(
     camera_id: UUID,
     image_queue: queue.Queue,
 ):
-    cap = cv2.VideoCapture(rtsp_url)
+
+    cap = cv2.VideoCapture(0 if rtsp_url == "0" else rtsp_url)
 
     last_frame = None
-    while cap.isOpened():
-        ret, frame = cap.read()
-        if not ret:
-            continue
+    try:
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if not ret:
+                continue
 
-        _, buffer = cv2.imencode('.jpg', frame)
+            _, buffer = cv2.imencode('.jpg', frame)
 
-        # Stops worker from queueing static images
-        if buffer == last_frame:
-            continue
-        last_frame = buffer  # TODO: should this be a deepcopy?
+            # Stops worker from queueing static images
+            if last_frame is not None and np.allclose(frame, last_frame, atol=10):
+                continue
+            last_frame = frame.copy()
 
-        image_frame = ImageFrame(
-            camera_id=camera_id,
-            image_data=buffer.tobytes(),
-            dimensions=[*frame.shape]
-        )
-        image_queue.put(image_frame)
+            image_frame = ImageFrame(
+                camera_id=camera_id,
+                image_data=buffer.tobytes(),
+                dimensions=[*frame.shape]
+            )
+            image_queue.put(image_frame)
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
 
 
 async def poll_image_queue_and_publish(

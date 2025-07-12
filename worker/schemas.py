@@ -11,8 +11,9 @@ class IncidentAnnotation(BaseModel):
     """
     label: str
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)  # Confidence score between 0 and 1
-    bounding_box: List[float] = Field(default_factory=list)  # [x_min, y_min, x_max, y_max]
+    bounding_box: List[int] = Field(default_factory=list)  # [x_min, y_min, x_max, y_max]
     category: Optional[str] = None  # Optional category for the annotation
+    embedding: List[float]
 
 
 class Incident(BaseModel):
@@ -21,7 +22,6 @@ class Incident(BaseModel):
     camera_id: UUID
     timestamp: float
     annotations: List[IncidentAnnotation]
-    embedding: List[float]
     dimensions: List[int]
 
 
